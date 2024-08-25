@@ -23,8 +23,27 @@ public class LogAnalyzer {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy:HH:mm:ss");
 
     public static void main(String[] args) throws Exception {
-        double minAvailability = Double.parseDouble(args[0]);
-        double maxResponseTime = Long.parseLong(args[1]);
+        double minAvailability = 0;
+        double maxResponseTime = 0;
+
+        for (int i = 0; i < args.length; i++) {
+            switch (args[i]) {
+                case "-u":
+                    minAvailability = Double.parseDouble(args[++i]);
+                    break;
+                case "-t":
+                    maxResponseTime = Long.parseLong(args[++i]);
+                    break;
+                default:
+                    System.out.println("Используйте java -jar analyze.jar -u <minAvailability> -t <maxResponseTime>");
+                    return;
+            }
+        }
+        if (minAvailability == 0 || maxResponseTime == 0) {
+            System.out.println("Используйте java -jar analyze.jar -u <minAvailability> -t <maxResponseTime>");
+            return;
+        }
+
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -64,17 +83,17 @@ public class LogAnalyzer {
         }
     }
 
-    private static LogEntry parseLogEntry(String line) {
+    public static LogEntry parseLogEntry(String line) {
         Matcher matcher = pattern.matcher(line);
         if (matcher.find()) {
             try {
                 Date dateTime = sdf.parse(matcher.group(2));
                 int responseCode = Integer.parseInt(matcher.group(3));
-                long responseTime = (long) Double.parseDouble(matcher.group(4));
+                double responseTime = Double.parseDouble(matcher.group(4));
 
                 return new LogEntry(dateTime, responseCode, responseTime);
             } catch (ParseException | NumberFormatException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
         return null;

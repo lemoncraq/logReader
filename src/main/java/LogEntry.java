@@ -6,9 +6,9 @@ import java.util.Date;
 public class LogEntry {
     private Date dateTime;
     private int responseCode;
-    private long responseTime;
+    private double responseTime;
 
-    public LogEntry(Date dateTime, int responseCode, long responseTime) {
+    public LogEntry(Date dateTime, int responseCode, double responseTime) {
         this.dateTime = dateTime;
         this.responseCode = responseCode;
         this.responseTime = responseTime;
@@ -30,11 +30,11 @@ public class LogEntry {
         this.responseCode = responseCode;
     }
 
-    public long getResponseTime() {
+    public double getResponseTime() {
         return responseTime;
     }
 
-    public void setResponseTime(long responseTime) {
+    public void setResponseTime(double responseTime) {
         this.responseTime = responseTime;
     }
 }
